@@ -2,6 +2,7 @@ const HFaddon = (function() {
     var _draw;
     var _xy;
     var btn_depart;
+    var btn_calcul;
     var btn_moyen_deplacement;
     var btn_moyen_deplacement
 //toggles display of form
@@ -62,6 +63,92 @@ const HFaddon = (function() {
       
     }
       
+//gets forms inputs and sends infomation for isochrone to be calculate on click caculer button   
+    var calcul = function () {
+            var times = [];
+            var distances = [];
+//changes input values to correspond to time in seconds and distance in meters
+            $("#heures_input").each(function(index,input) {
+                if (input.value > 0) {
+                    times.push(input.value*3600);
+                };
+            });
+
+            $("#minutes_input").each(function(index,input) {
+                if (input.value > 0) {
+                    times.push(input.value*60);
+                };
+            });
+
+            $("#kilometres_input").each(function(index,input) {
+                if (input.value > 0) {
+                    distances.push(input.value*1000);
+                }
+            });
+
+            $("#metres_input").each(function(index,input) {
+                if (input.value > 0) {
+                    distances.push(input.value);
+                }
+            });
+
+            if (!_xy || (times.length === 0) && (distances.length === 0)) {
+                mviewer.alert("Isochrones : Il faut définir l'origine et au moins un temps de parcours ou une distance", "alert-info")
+                return;
+            }
+//Adds all times and sets it to a variabel, same with distance            
+            var totalTime = 0;
+            for(var t = 0; t<times.length; t++){
+              totalTime = totalTime + parseInt(times[t]);
+            }
+
+            var totalDistance = 0;
+            for(var t = 0; t<distances.length; t++){
+              totalDistance = totalDistance + parseInt(distances[t]);
+            }
+//gets other parameters for request
+            var mode = $(".selected.isochrone-mode").attr("data-mode");
+            var url = "https://kartenn.region-bretagne.fr/isochrone?";
+
+            var dataParameters = {
+                            "location":_xy.join(","),
+                            "graphName":mode,
+                            "smoothing": true,
+                            "holes":true,
+                            "srs": "epsg:4326"   
+                        };
+
+            if( totalTime != 0 && totalDistance== 0){
+              dataParameters["time"]=totalTime;
+              dataParameters["method"]="time";
+            } else if( totalDistance != 0 && totalTime == 0){
+              dataParameters["distance"]=totalDistance;
+              dataParameters["method"]="distance";
+            }else{
+              mviewer.alert("Isochrones : Il faut définir soit un temps soit une distance, pas les deux", "alert-info")
+              return;
+            };
+            
+//Sends request, shows loading messages when request is sent, hides messages when result recieved
+            $("#loading-isochrones").show();
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        crossDomain: true,
+                        data: dataParameters,
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response)
+                            _showResult(response);
+                        },
+                        error: function (request, status, error) {
+                            console.log(error);
+                        document.getElementById("loading").style.display = "none";
+                        }
+                    });
+            document.getElementById("loading").style.display = "block";
+    };
+
     return {
 
         init : function () {
@@ -80,6 +167,9 @@ const HFaddon = (function() {
             btn_depart = document.getElementById('choisir_depart');
             btn_depart.addEventListener('click', getXY);
 
+//used for calcuate button
+            btn_calcul = document.getElementById('calcul_result');
+            btn_calcul.addEventListener('click', calcul);
 
 //Used for transport mode switch
             btn_moyen_deplacement = document.getElementsByClassName('isochrone-mode');
