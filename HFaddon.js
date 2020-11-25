@@ -1,8 +1,10 @@
 const HFaddon = (function() {
+
     var _draw;
     var _xy;
     var btn_depart;
     var btn_calcul;
+    var btn_reset;
     var btn_moyen_deplacement;
     var btn_moyen_deplacement
     var _layer;
@@ -171,6 +173,26 @@ const HFaddon = (function() {
         feature.setStyle(style);
     };
 
+//Reset function on click of reset button
+    var reset_form = function(){
+          _xy = null;
+          mviewer.hideLocation();
+          _layer.getSource().clear();
+          $('#temps :input').val('');
+          $('#distance :input').val('');
+          $('#color :input').val('#2e5367');
+          if($('#distance-button').hasClass('selected')){
+            $('#distance-button').removeClass('selected');
+            $('#time-button').addClass('selected');
+            document.getElementById("temps").style.display = "block";
+            document.getElementById("distance").style.display = "block";
+          };
+          if($('#walking-button').hasClass('selected')){
+            $('#walking-button').removeClass('selected');
+            $('#car-button').addClass('selected');
+          };
+    };
+
     return {
 
         init : function () {
@@ -208,6 +230,13 @@ const HFaddon = (function() {
             var _map = mviewer.getMap();
             _map.addLayer(_layer);
 
+//used for reset button
+            btn_reset = document.getElementById('reset');
+            btn_reset.addEventListener('click', reset_form);
+  
+        }
+
+      }
 })();
 
 new CustomComponent("HFaddon", HFaddon.init);
