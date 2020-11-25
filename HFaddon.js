@@ -5,6 +5,8 @@ const HFaddon = (function() {
     var btn_calcul;
     var btn_moyen_deplacement;
     var btn_moyen_deplacement
+    var _layer;
+  
 //toggles display of form
     var _toggleForm = function (e) {
         var _form = document.getElementById("custom-popin");
@@ -149,6 +151,26 @@ const HFaddon = (function() {
             document.getElementById("loading").style.display = "block";
     };
 
+//displays result recieved from gesoservice
+    var _showResult = function (data) {
+            var format = new ol.format.WKT();
+            var feature = format.readFeature(data.wktGeometry, {
+                    dataProjection: 'EPSG:4326',
+                    featureProjection: 'EPSG:3857'
+                  });
+            _layer.getSource().clear();
+            _layer.getSource().addFeature(feature);
+          document.getElementById("loading").style.display = "none";
+//sets color for result displayed
+          var fill = $("#iso_color").val()+"80";
+          var stroke = $("#iso_color").val();
+          var style = new ol.style.Style({
+            fill: new ol.style.Fill({color:fill}),
+            stroke: new ol.style.Stroke({color:stroke, width: 2}),
+        });
+        feature.setStyle(style);
+    };
+
     return {
 
         init : function () {
@@ -180,6 +202,11 @@ const HFaddon = (function() {
             btn_moyen_parametre = document.getElementsByClassName('parametre');
             btn_moyen_parametre[0].addEventListener('click', switchModeParametre);
             btn_moyen_parametre[1].addEventListener('click', switchModeParametre);
+
+//used to create new layer
+            _layer = new ol.layer.Vector({source:new ol.source.Vector()});
+            var _map = mviewer.getMap();
+            _map.addLayer(_layer);
 
 })();
 
