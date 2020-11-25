@@ -1,0 +1,9 @@
+{
+    "js": ["HFaddon.js"],
+    "css": "HFaddon.css",
+    "html": "HFaddon.html",
+    "target": "page-content-wrapper",
+    "options": {
+        "title": ""
+    }
+}
