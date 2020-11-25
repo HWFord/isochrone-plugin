@@ -1,4 +1,9 @@
 const HFaddon = (function() {
+    var _draw;
+    var _xy;
+    var btn_depart;
+    var btn_moyen_deplacement;
+    var btn_moyen_deplacement
 //toggles display of form
     var _toggleForm = function (e) {
         var _form = document.getElementById("custom-popin");
@@ -30,6 +35,33 @@ const HFaddon = (function() {
         mviewer.getMap().addInteraction(_draw);
 
     };
+
+//switch for transport mode
+    var switchModeDeplacement= function (e) {
+      let element = e.currentTarget;
+      $(".selected.isochrone-mode").removeClass("selected");
+      $(element).addClass("selected");
+    }
+
+//switch between time and distance, display respective form and clears the form not displayed
+    var switchModeParametre= function (f) {
+
+      let element = f.currentTarget;
+      $(".selected.parametre").removeClass("selected");
+      $(element).addClass("selected");
+      var parametreData = element.dataset.parametre;
+      if(parametreData === "temps"){
+        document.getElementById("temps").style.display = "block";
+        document.getElementById("distance").style.display = "none";
+        $('#distance :input').val('');
+      }else if(parametreData === "distance"){
+        document.getElementById("distance").style.display = "block";
+        document.getElementById("temps").style.display = "none";
+        $('#temps :input').val('');
+      }
+      
+    }
+      
     return {
 
         init : function () {
@@ -47,6 +79,17 @@ const HFaddon = (function() {
 //used for getting start point
             btn_depart = document.getElementById('choisir_depart');
             btn_depart.addEventListener('click', getXY);
+
+
+//Used for transport mode switch
+            btn_moyen_deplacement = document.getElementsByClassName('isochrone-mode');
+            btn_moyen_deplacement[0].addEventListener('click', switchModeDeplacement);
+            btn_moyen_deplacement[1].addEventListener('click', switchModeDeplacement);
+
+//used for option switch between time and distance
+            btn_moyen_parametre = document.getElementsByClassName('parametre');
+            btn_moyen_parametre[0].addEventListener('click', switchModeParametre);
+            btn_moyen_parametre[1].addEventListener('click', switchModeParametre);
 
 })();
 
