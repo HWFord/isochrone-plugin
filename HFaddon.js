@@ -234,6 +234,11 @@ const HFaddon = (function() {
             btn_reset = document.getElementById('reset');
             btn_reset.addEventListener('click', reset_form);
   
+//adds easy drag for isochrone form
+            $('#custom-popin').easyDrag({
+              handle: '.header',
+              container: $('#map') 
+            });
         }
 
       }
