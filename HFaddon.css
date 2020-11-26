@@ -30,13 +30,12 @@ padding:10px;
 margin-bottom:10px;
 }
 
-.header:hover{
-cursor: all-scroll;
-}
-
 h3{
 margin:0;
+margin-left:10px;
 font-size:18px;
+display:inline-block;
+
 }
 
 h4{

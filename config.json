@@ -1,9 +1,11 @@
 {
-    "js": ["HFaddon.js"],
+    "js": ["HFaddon.js","jquery.easyDrag.min.js"],
     "css": "HFaddon.css",
     "html": "HFaddon.html",
     "target": "page-content-wrapper",
     "options": {
-        "title": ""
+        "title": "Calcul d'isochrone",
+        "isochroneUrl":"https://kartenn.region-bretagne.fr/isochrone?", 
+        "isohroneColor":"#b45793"   
     }
 }

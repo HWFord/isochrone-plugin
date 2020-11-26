@@ -5,8 +5,8 @@ const HFaddon = (function() {
     var btn_depart;
     var btn_calcul;
     var btn_reset;
-    var btn_moyen_deplacement;
-    var btn_moyen_deplacement
+    var btn_moyen_deplacement_voiture;
+    var btn_moyen_deplacement_pieton;
     var _layer;
   
 //toggles display of form
@@ -112,7 +112,7 @@ const HFaddon = (function() {
             }
 //gets other parameters for request
             var mode = $(".selected.isochrone-mode").attr("data-mode");
-            var url = "https://kartenn.region-bretagne.fr/isochrone?";
+            var url = mviewer.customComponents["HFaddon"].config.options.isochroneUrl;
 
             var dataParameters = {
                             "location":_xy.join(","),
@@ -193,6 +193,8 @@ const HFaddon = (function() {
           };
     };
 
+
+
     return {
 
         init : function () {
@@ -216,14 +218,16 @@ const HFaddon = (function() {
             btn_calcul.addEventListener('click', calcul);
 
 //Used for transport mode switch
-            btn_moyen_deplacement = document.getElementsByClassName('isochrone-mode');
-            btn_moyen_deplacement[0].addEventListener('click', switchModeDeplacement);
-            btn_moyen_deplacement[1].addEventListener('click', switchModeDeplacement);
+            btn_moyen_deplacement_voiture = document.getElementById('car-button');
+            btn_moyen_deplacement_voiture.addEventListener('click', switchModeDeplacement);
+            btn_moyen_deplacement_pieton = document.getElementById('walking-button');
+            btn_moyen_deplacement_pieton.addEventListener('click', switchModeDeplacement);
 
 //used for option switch between time and distance
-            btn_moyen_parametre = document.getElementsByClassName('parametre');
-            btn_moyen_parametre[0].addEventListener('click', switchModeParametre);
-            btn_moyen_parametre[1].addEventListener('click', switchModeParametre);
+            btn_moyen_parametre_time = document.getElementById('time-button');
+            btn_moyen_parametre_time.addEventListener('click', switchModeParametre);
+            btn_moyen_parametre_distance = document.getElementById('distance-button');
+            btn_moyen_parametre_distance.addEventListener('click', switchModeParametre);
 
 //used to create new layer
             _layer = new ol.layer.Vector({source:new ol.source.Vector()});
@@ -233,15 +237,21 @@ const HFaddon = (function() {
 //used for reset button
             btn_reset = document.getElementById('reset');
             btn_reset.addEventListener('click', reset_form);
-  
+
+//gets info from json file
+            var isoTitle = mviewer.customComponents["HFaddon"].config.options.title;
+            document.getElementById('addon_title').innerText = isoTitle;
+            var isoColor = mviewer.customComponents["HFaddon"].config.options.isohroneColor;
+            document.getElementById('iso_color').value = isoColor;
+
 //adds easy drag for isochrone form
             $('#custom-popin').easyDrag({
               handle: '.header',
               container: $('#map') 
             });
         }
-
       }
 })();
 
 new CustomComponent("HFaddon", HFaddon.init);
+
