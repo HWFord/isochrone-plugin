@@ -9,7 +9,12 @@ const HFaddon = (function() {
     var btn_moyen_deplacement_pieton;
     var _layer;
   
-//toggles display of form
+
+    /**
+     *toggles display of form
+     * @param  {event} e
+     */
+
     var _toggleForm = function (e) {
         var _form = document.getElementById("custom-popin");
         if (_form.style.display === "none") {
@@ -25,7 +30,11 @@ const HFaddon = (function() {
         }
     };
 
-//gets start point on click of button and click on map
+
+    /**
+     *gets start point on click of button and click on map
+     */
+
     var getXY = function () {
         info.disable();
         _draw = new ol.interaction.Draw({
@@ -41,14 +50,22 @@ const HFaddon = (function() {
 
     };
 
-//switch for transport mode
+    /**
+     *switch between transport mode adds/removes selected class 
+     * @param  {event} e
+     */
+
     var switchModeDeplacement= function (e) {
       let element = e.currentTarget;
       $(".selected.isochrone-mode").removeClass("selected");
       $(element).addClass("selected");
     }
 
-//switch between time and distance, display respective form and clears the form not displayed
+    /**
+     *switch between time and distance, display respective form and clears the form not displayed, adds/removes selected class 
+     * @param  {event} f
+     */
+
     var switchModeParametre= function (f) {
 
       let element = f.currentTarget;
@@ -66,12 +83,22 @@ const HFaddon = (function() {
       }
       
     }
-      
-//gets forms inputs and sends infomation for isochrone to be calculate on click caculer button   
+       
+    /**
+     *gets forms inputs and sends infomation for isochrone to be calculate on click caculer button
+     */
+
     var calcul = function () {
             var times = [];
             var distances = [];
-//changes input values to correspond to time in seconds and distance in meters
+
+            /**
+             * Converts input values to correspond to time in seconds and distance in meters, adds all values to corresponding table
+             * @param  {input} "#heures_input", "#minutes_input", "#kilometres_input", "#metres_input"
+             * @param  {} .each(function(index
+             * @param  {number} input
+             */
+
             $("#heures_input").each(function(index,input) {
                 if (input.value > 0) {
                     times.push(input.value*3600);
@@ -100,7 +127,12 @@ const HFaddon = (function() {
                 mviewer.alert("Isochrones : Il faut définir l'origine et au moins un temps de parcours ou une distance", "alert-info")
                 return;
             }
-//Adds all times and sets it to a variabel, same with distance            
+
+            /**
+             * adds all values from table together for one total time and total distance
+             * @param  {number} "totalTime", "totalDistance"
+             */
+
             var totalTime = 0;
             for(var t = 0; t<times.length; t++){
               totalTime = totalTime + parseInt(times[t]);
@@ -110,7 +142,11 @@ const HFaddon = (function() {
             for(var t = 0; t<distances.length; t++){
               totalDistance = totalDistance + parseInt(distances[t]);
             }
-//gets other parameters for request
+
+            /**
+             * gets other parameters for request
+             */
+
             var mode = $(".selected.isochrone-mode").attr("data-mode");
             var url = mviewer.customComponents["HFaddon"].config.options.isochroneUrl;
 
@@ -133,7 +169,12 @@ const HFaddon = (function() {
               return;
             };
             
-//Sends request, shows loading messages when request is sent, hides messages when result recieved
+            /**
+             *Sends request, shows loading messages when request is sent, hides messages when result recieved
+             * @param  {} "#loading-isochrones"
+             * @param  {} .show
+             */
+
             $("#loading-isochrones").show();
                     $.ajax({
                         type: "GET",
@@ -153,7 +194,11 @@ const HFaddon = (function() {
             document.getElementById("loading").style.display = "block";
     };
 
-//displays result recieved from gesoservice
+    /**
+     *displays result recieved from gesoservice
+     * @param  {json} data 
+     */
+
     var _showResult = function (data) {
             var format = new ol.format.WKT();
             var feature = format.readFeature(data.wktGeometry, {
@@ -163,7 +208,7 @@ const HFaddon = (function() {
             _layer.getSource().clear();
             _layer.getSource().addFeature(feature);
           document.getElementById("loading").style.display = "none";
-//sets color for result displayed
+          //sets color for result displayed
           var fill = $("#iso_color").val()+"80";
           var stroke = $("#iso_color").val();
           var style = new ol.style.Style({
@@ -173,7 +218,10 @@ const HFaddon = (function() {
         feature.setStyle(style);
     };
 
-//Reset function on click of reset button
+    /**
+     *Reset function on click of reset button
+     */
+
     var reset_form = function(){
           _xy = null;
           mviewer.hideLocation();
@@ -198,7 +246,11 @@ const HFaddon = (function() {
     return {
 
         init : function () {
-//creates button used for toggling form display
+
+            /**
+            *Creates button used for toggling form display
+            */
+
             var _btn = document.createElement("button");
             _btn.id="hfbtn";
             _btn.className = "btn btn-default btn-raised";
@@ -209,42 +261,67 @@ const HFaddon = (function() {
             _btn.addEventListener('click', _toggleForm);
             document.getElementById("toolstoolbar").appendChild(_btn);
 
-//used for getting start point
+            /**
+            *used for getting start point
+            */
+
             btn_depart = document.getElementById('choisir_depart');
             btn_depart.addEventListener('click', getXY);
 
-//used for calcuate button
+            /**
+            *used for calcuate button
+            */
+
             btn_calcul = document.getElementById('calcul_result');
             btn_calcul.addEventListener('click', calcul);
 
-//Used for transport mode switch
+            /**
+            *Used for transport mode switch
+            */
+
             btn_moyen_deplacement_voiture = document.getElementById('car-button');
             btn_moyen_deplacement_voiture.addEventListener('click', switchModeDeplacement);
             btn_moyen_deplacement_pieton = document.getElementById('walking-button');
             btn_moyen_deplacement_pieton.addEventListener('click', switchModeDeplacement);
 
-//used for option switch between time and distance
+            /**
+            *used for option switch between time and distance
+            */
+
             btn_moyen_parametre_time = document.getElementById('time-button');
             btn_moyen_parametre_time.addEventListener('click', switchModeParametre);
             btn_moyen_parametre_distance = document.getElementById('distance-button');
             btn_moyen_parametre_distance.addEventListener('click', switchModeParametre);
 
-//used to create new layer
+            /**
+            *used to create new layer
+            */
+
             _layer = new ol.layer.Vector({source:new ol.source.Vector()});
             var _map = mviewer.getMap();
             _map.addLayer(_layer);
 
-//used for reset button
+            /**
+            *used for reset button
+            */
+
             btn_reset = document.getElementById('reset');
             btn_reset.addEventListener('click', reset_form);
 
-//gets info from json file
+            /**
+            *gets info from json file
+            */
+
             var isoTitle = mviewer.customComponents["HFaddon"].config.options.title;
             document.getElementById('addon_title').innerText = isoTitle;
             var isoColor = mviewer.customComponents["HFaddon"].config.options.isohroneColor;
             document.getElementById('iso_color').value = isoColor;
 
-//adds easy drag for isochrone form
+            /**
+             *adds easy drag to draggable element
+             * @param  {html element} '#custom-popin'
+             */
+
             $('#custom-popin').easyDrag({
               handle: '.header',
               container: $('#map') 
