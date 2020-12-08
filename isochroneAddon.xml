@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <application
-      title="HFaddon"
+      title="isochroneAddon"
       logo=""
       help=""
       style="css/themes/default.css"
@@ -12,7 +12,7 @@
       togglealllayersfromtheme="false">
   </application>
   <extensions>
-      <extension type="component" id="HFaddon" path="demo/addons"/>
+      <extension type="component" id="isochroneAddon" path="demo/addons"/>
   </extensions>
   <mapoptions maxzoom="20" projection="EPSG:3857" center="-339635.95753680886, 6158414.503773717" zoom="9" />
   <baselayers style="default">

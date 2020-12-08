@@ -1,4 +1,4 @@
-const HFaddon = (function() {
+const isochroneAddon = (function() {
 
     var _draw;
     var _xy;
@@ -148,7 +148,7 @@ const HFaddon = (function() {
              */
 
             var mode = $(".selected.isochrone-mode").attr("data-mode");
-            var url = mviewer.customComponents["HFaddon"].config.options.isochroneUrl;
+            var url = mviewer.customComponents["isochroneAddon"].config.options.isochroneUrl;
 
             var dataParameters = {
                             "location":_xy.join(","),
@@ -312,9 +312,9 @@ const HFaddon = (function() {
             *gets info from json file
             */
 
-            var isoTitle = mviewer.customComponents["HFaddon"].config.options.title;
+            var isoTitle = mviewer.customComponents["isochroneAddon"].config.options.title;
             document.getElementById('addon_title').innerText = isoTitle;
-            var isoColor = mviewer.customComponents["HFaddon"].config.options.isohroneColor;
+            var isoColor = mviewer.customComponents["isochroneAddon"].config.options.isohroneColor;
             document.getElementById('iso_color').value = isoColor;
 
             /**
@@ -330,5 +330,5 @@ const HFaddon = (function() {
       }
 })();
 
-new CustomComponent("HFaddon", HFaddon.init);
+new CustomComponent("isochroneAddon", isochroneAddon.init);
 

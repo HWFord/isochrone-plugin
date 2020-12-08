@@ -1,7 +1,7 @@
 {
-    "js": ["HFaddon.js","jquery.easyDrag.min.js"],
-    "css": "HFaddon.css",
-    "html": "HFaddon.html",
+    "js": ["isochroneAddon.js","jquery.easyDrag.min.js"],
+    "css": "isochroneAddon.css",
+    "html": "isochroneAddon.html",
     "target": "page-content-wrapper",
     "options": {
         "title": "Calcul d'isochrone",
